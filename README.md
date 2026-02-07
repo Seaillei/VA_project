@@ -4,7 +4,7 @@ Projekt na VA
 ##  Základní nápad
 Jednalo  by se o jednoduchou 2D platformovou hru v 8-bitovém stylu s pohledem z boku. 
 
-Hráč ovládá postavu a jeho úkolem je projít jednotlivé levely a dostat se do jejich cíle. Během hry bude se bude muset pohybovat kolem, ať už z důvodů parkuru, který by byl potřeba k dokončení levelu ale také kvůli překonáváni různých překážek a vyhýbání se enemákům, po případně s nimi bojovat. Hra bude obsahovat více levelů.
+Hráč ovládá postavu a jeho úkolem je projít jednotlivé levely a dostat se do jejich cíle. Během hry se bude pohybovat prostředím, ať už z důvodů parkouru, překonávání překážek (důležité pro dokončení levelu) nebo vyhýbání se enemákum (po případě s nimi bojovat). Hra bude obsahovat více levelů.
 
 Součástí bude také jednoduchý level editor, který jak usnadní práci mě, tak také dá možnost hráčům vytvářet si své vlastní levely. 
 
