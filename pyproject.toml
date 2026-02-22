@@ -1,0 +1,36 @@
+[project]
+name = "cgui"
+version = "0.0.1"
+authors = [
+  { name="Natalie Trnkova", email="trnkona24@sps-prosek.cz" },
+]
+
+description = "My cheap Mario copy"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+
+# zde muzete zadefinovat spustitelne skripty (tj. pokud pisete knihovnu, tak zde muzete definovat jak spustit nejaky priklad pouziti knihovny)
+[project.scripts]
+run-game = "src.main:main
+
+
+[project.urls]
+Homepage = "https://github.com/Seaillei/VA_project"
+Issues = "https://github.com/Seaillei/VA_project/issues"
+
+
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
