@@ -1,1 +1,4 @@
-zatim zadne
+zatim
+- pygame
+- json
+- os
