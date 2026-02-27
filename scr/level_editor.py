@@ -35,6 +35,32 @@ class Button():
                     return True
         return False
 
+class Tiles:
+    def __init__(self):
+        self.buttons = []
+
+        self.buttons.append(Button(full_width + 50, 50, white, 0))
+        self.buttons.append(Button(full_width + 125, 50, brown, 1))
+        self.buttons.append(Button(full_width + 200, 50, gray, 2))
+        self.buttons.append(Button(full_width + 50, 125, yellow, 3))
+
+        self.selected_tile = 0
+
+    def draw(self, screen):
+        for button in self.buttons:
+            button.draw(screen)
+
+        pygame.draw.rect(
+            screen,
+            (0,0,0),
+            self.buttons[self.selected_tile].rect,
+            3
+        )
+
+    def handle_event(self, event):
+        for button in self.buttons:
+            if button.is_clicked(event):
+                self.selected_tile = button.tile_id
 
 #sizes
 rows = 16
@@ -51,6 +77,9 @@ green = (144, 201, 120)
 white = (255, 255, 255)
 red = (200, 25, 25)
 black = (0, 0, 0)
+brown = (139, 69, 19)
+gray = (120, 120, 120)
+yellow = (255, 215, 0)
 
 #tiles
 tile_size = full_height // rows
@@ -70,17 +99,7 @@ def draw_grid():
     for c in range(rows + 1):
         pygame.draw.line(screen, white, (0, c * tile_size), (full_width, c * tile_size))
 
-#buttons
-button_list = []
-button_col = 0
-button_row = 0
-for i in range(tile_types):
-    tile_button = Button(full_width + (75* button_col) + 50, 75 * button_row + 50, red, 1)
-    button_list.append(tile_button)
-    button_col += 1
-    if button_col == 3:
-        button_row += 1
-        button_col = 0
+palette = Tiles()
 
 running = True
 
@@ -90,21 +109,17 @@ while running:
     draw_grid()  
 
     #tile panel
-    pygame.draw.rect(screen, green, (full_width, 0, side_margin, full_height + 1))
+    pygame.draw.rect(screen, green, (full_width, 0, side_margin, full_height + 1))  
 
-    #choose a tile
-    for button in button_list:
-        button.draw(screen)
-
-    # highlight selected tile
-    pygame.draw.rect(screen, black, button_list[current_tile].rect, 3)
+    palette.draw(screen)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        palette.handle_event(event)
         
         #scrollovani
-             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 scroll_left = True
@@ -117,9 +132,6 @@ while running:
             if event.key == pygame.K_d:
                 scroll_right = False
         
-        for index, button in enumerate(button_list):
-            if button.is_clicked(event):
-                current_tile = index
     
     if scroll_left == True and scroll > 0:
         scroll -= 5 
