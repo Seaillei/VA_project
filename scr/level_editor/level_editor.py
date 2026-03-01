@@ -295,4 +295,3 @@ def run_editor(screen, clock):
 
         pygame.display.update()
         clock.tick(FPS)
-
