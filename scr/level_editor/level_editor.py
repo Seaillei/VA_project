@@ -1,7 +1,7 @@
 import pygame
 import json
 import os
-
+ 
 
 FPS = 60
 
@@ -63,7 +63,8 @@ class UI_Button():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
-                    self.action()
+                   return self.action()
+        return None
 
 class Tiles:
     def __init__(self, font):
@@ -181,12 +182,13 @@ def load_level():
         try:
             with open(filename, "r") as f:
                 map_data = json.load(f)
-            print(f"Loaded level from: {filename}")
         except Exception as e:
             print("Failed to load level:", e)
     else:
         print("Level file does not exist!")
 
+def to_menu():
+    return "menu"
 
 def run_editor(screen, clock):
 
@@ -204,20 +206,24 @@ def run_editor(screen, clock):
     palette = Tiles(buttons_text)
     save_button = UI_Button(50, full_height + lower_margin - 75, 120, 50, white, action = save_level, text = "SAVE LEVEL", font = buttons_text, text_color = black)
     load_button = UI_Button(50 + 120 + 25, full_height + lower_margin - 75, 120, 50, white, action = load_level, text = "LOAD LEVEL", font = buttons_text, text_color = black)
+    back_button = UI_Button(side_margin + full_width - 120 - 25, full_height + lower_margin - 75, 120, 50, white, action = to_menu, text = "MAIN MENU", font = buttons_text, text_color = black)
 
-    editor_running = True
-    while editor_running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return "menu"
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_ESCAPE:
+            #         return "menu"
 
             palette.handle_event(event)
             save_button.handle_event(event)
             load_button.handle_event(event)
+
+            result = back_button.handle_event(event)
+            if result:
+                return result
             
             #scrollovani
             if event.type == pygame.KEYDOWN:
@@ -246,12 +252,12 @@ def run_editor(screen, clock):
 
         palette.draw(screen)
         
-        outputing_text(f'Custom level: {level}', nadpisy, white, 50 + (120 + 25) * 2, full_height + lower_margin - 80, screen)
-        outputing_text(f'Press UP or DOWN to change level', nadpisy, white, 50 + (120 + 25) * 2, full_height + lower_margin - 60, screen)
-        outputing_text(f'Press ESC to return to the menu', nadpisy, white, 50 + (120 + 25) * 2, full_height + lower_margin - 40, screen)
+        outputing_text(f'Custom level: {level}', nadpisy, white, 50 + (120 + 25) * 2, full_height + lower_margin - 72, screen)
+        outputing_text(f'Press UP or DOWN to change level', nadpisy, white, 50 + (120 + 25) * 2, full_height + lower_margin - 48, screen)
 
         save_button.draw(screen)
         load_button.draw(screen)
+        back_button.draw(screen)
             
 
         if scroll_left == True and scroll > 0:
