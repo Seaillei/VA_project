@@ -55,9 +55,9 @@ def run_menu(screen, clock):
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)
 
-    editor_button = Menu_Button(full_width/2 - 60, 75, 120, 50, white, action = to_editor, text = "LEVEL EDITOR", font = buttons_text, text_color = black)
-    custom_levels_button = Menu_Button(full_width/2 - 60, 75 + 50 + 25, 120, 50, white, action = to_custom_levels, text = "CUSTOM LEVELS", font = buttons_text, text_color = black)
-    quit_game_button = Menu_Button(full_width/2 - 60, 75 + 50 + 25 + 50 + 25, 120, 50, white, action = quit_game, text = "QUIT GAME", font = buttons_text, text_color = black)
+    editor_button = Menu_Button(full_width/2 - 200, 75, 400, 50, white, action = to_editor, text = "LEVEL EDITOR", font = buttons_text, text_color = black)
+    custom_levels_button = Menu_Button(full_width/2 - 200, 75 + 50 + 25, 400, 50, white, action = to_custom_levels, text = "CUSTOM LEVELS", font = buttons_text, text_color = black)
+    quit_game_button = Menu_Button(full_width/2 - 200, 75 + 50 + 25 + 50 + 25, 400, 50, white, action = quit_game, text = "QUIT GAME", font = buttons_text, text_color = black)
 
     while True:
         for event in pygame.event.get():
