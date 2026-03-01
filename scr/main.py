@@ -1,6 +1,7 @@
 import pygame
 from level_editor.level_editor import run_editor
 from level_editor.custom_level_menu import run_custom_menu
+from level_editor.custom_level import run_custom_level
 from main_menu.menu import run_menu
 
 full_width = 1100
@@ -27,5 +28,8 @@ def main():
         
         elif current_state == "custom_levels":
             current_state = run_custom_menu(screen, clock)
+
+        else:
+            current_state = run_custom_level(screen, clock, current_state)
 
 main()
