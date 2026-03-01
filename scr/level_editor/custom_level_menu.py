@@ -51,6 +51,9 @@ def get_available_levels():
 def to_menu():
     return "menu"
 
+def to_level(level):
+    return level
+
 def run_custom_menu(screen, clock):
     #font
     nadpisy = pygame.font.SysFont("Futura", 28)
@@ -61,7 +64,7 @@ def run_custom_menu(screen, clock):
     buttons = []
     y_start = 50
     for i, level_file in enumerate(levels):
-        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f = level_file: print(f"Load {f} here"), text = level_file.replace("_data.json","").upper(), font = buttons_text, text_color = black))
+        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f=level_file: to_level(f), text = level_file.replace("_data.json","").upper(), font = buttons_text, text_color = black))
 
     back_button = Menu_Button(full_width - 120 - 25, full_height - 75, 120, 50, white, action = to_menu, text = "MAIN MENU", font = buttons_text, text_color = black)
 
@@ -72,7 +75,9 @@ def run_custom_menu(screen, clock):
                 exit()
 
             for button in buttons:
-                button.handle_event(event)
+                result = button.handle_event(event)
+                if result:
+                    return result
 
             result = back_button.handle_event(event)
             if result:
