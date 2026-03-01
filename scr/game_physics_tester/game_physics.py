@@ -1,6 +1,6 @@
 import pygame
 
-pygame.init()
+pygame.init() 
 pygame.font.init()
 
 width, height = 1280, 720
