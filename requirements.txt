@@ -1,4 +1,2 @@
 zatim
-- pygame
-- json
-- os
+- pygame 2.6.1
