@@ -1,6 +1,6 @@
 import pygame
 import os
-
+ 
 FPS = 60
 current = "custom_levels"
 
@@ -29,7 +29,8 @@ class Menu_Button():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
-                    self.action()
+                    return self.action()
+        return None
 
 #color
 green = (144, 201, 120)
@@ -47,13 +48,10 @@ def get_available_levels():
         return []
     return sorted([f for f in os.listdir(folder) if f.startswith("level") and f.endswith("_data.json")])
 
-def to_custom_levels():
-    global current
-    current = "menu"
+def to_menu():
+    return "menu"
 
 def run_custom_menu(screen, clock):
-    global current
-
     #font
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)
@@ -63,13 +61,11 @@ def run_custom_menu(screen, clock):
     buttons = []
     y_start = 50
     for i, level_file in enumerate(levels):
-        buttons.append(Menu_Button(full_width/2 - 100, y_start + i * 60, 200, 50, green, action = lambda f=level_file: print(f"Load {f} here"), text=level_file.replace("_data.json","").upper(), font=buttons_text, text_color=(0,0,0)))
+        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f = level_file: print(f"Load {f} here"), text = level_file.replace("_data.json","").upper(), font = buttons_text, text_color = black))
 
-    back_button = Menu_Button(60, 75, 120, 50, white, action = to_custom_levels,text="MAIN MENU", font=buttons_text, text_color=black)
+    back_button = Menu_Button(full_width - 120 - 25, full_height - 75, 120, 50, white, action = to_menu, text = "MAIN MENU", font = buttons_text, text_color = black)
 
-    custom_levels_running = True
-
-    while custom_levels_running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -77,15 +73,15 @@ def run_custom_menu(screen, clock):
 
             for button in buttons:
                 button.handle_event(event)
-            back_button.handle_event(event)
+
+            result = back_button.handle_event(event)
+            if result:
+                return result
 
         screen.fill(gray)
         for button in buttons:
             button.draw(screen)
         back_button.draw(screen)
-
-        if current != "custom_levels":
-            return current
 
         pygame.display.update()
         clock.tick(FPS)
