@@ -111,7 +111,7 @@ yellow = (255, 215, 0)
 
 #tiles
 tile_size = full_height // rows
-tile_types = 12
+tile_types = 4
 current_tile = 0
 
 tile_colors = {
@@ -295,3 +295,4 @@ def run_editor(screen, clock):
 
         pygame.display.update()
         clock.tick(FPS)
+
