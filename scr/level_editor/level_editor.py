@@ -74,6 +74,9 @@ class Tiles:
         self.buttons.append(Tile_button(full_width + 125, 50, red, 1, font, "DAMAGE", black))
         self.buttons.append(Tile_button(full_width + 200, 50, green, 2, font, "START-flag", black))
         self.buttons.append(Tile_button(full_width + 50, 125, black, 3, font, "FINISH-flag", white))
+        self.buttons.append(Tile_button(full_width + 125, 125, blue, 4, font, "WALKER", white))
+        self.buttons.append(Tile_button(full_width + 200, 125, orange, 5, font, "JUMPER", black))
+        self.buttons.append(Tile_button(full_width + 50, 200, purple, 6, font, "PLATFORM", white))
 
         self.selected_tile = 0
 
@@ -104,10 +107,13 @@ scroll_speed = 1
 green = (144, 201, 120)
 white = (255, 255, 255)
 red = (200, 25, 25)
+blue = (0, 0, 255)
 black = (25, 25, 25)
 brown = (139, 69, 19)
 gray = (120, 120, 120)
+purple = (128, 0, 128)
 yellow = (255, 215, 0)
+orange = (255, 165, 0)
 
 #tiles
 tile_size = full_height // rows
@@ -119,7 +125,10 @@ tile_colors = {
     0: white, 
     1: red,
     2: green,
-    3: black
+    3: black,
+    4: blue,      # walker start
+    5: orange,    # jumper
+    6: purple 
 }
 
 # tile_images = {
@@ -132,6 +141,9 @@ tile_colors = {
 #empty tile list
 
 map_data = []
+enemy_data = []
+platform_data = []
+
 for row in range(rows):
     all_rows = [-1] * max_collums
     map_data.append(all_rows)   
@@ -153,13 +165,68 @@ def draw_grid(screen):
     for c in range(rows + 1):
         pygame.draw.line(screen, white, (0, c * tile_size), (full_width, c * tile_size))
 
-def draw_world_tiles(screen):
-     for y, row in enumerate(map_data):
-         for x, tile in enumerate(row):
+def draw_world_tiles(screen, placing_object=None):
+    for y, row in enumerate(map_data):
+        for x, tile in enumerate(row):
             if tile != -1:
                 color = tile_colors[tile]
+                pygame.draw.rect(screen, color, (x * tile_size - scroll, y * tile_size, tile_size, tile_size))
 
-                pygame.draw.rect(screen, color, (x * tile_size - scroll,y * tile_size, tile_size, tile_size))
+    # Draw the temporary start for walker/platform
+    if placing_object is not None:
+        px = placing_object["start_x"] * tile_size - scroll
+        py = placing_object["start_y"] * tile_size
+        color = blue if placing_object["type"] == "walker" else purple
+        pygame.draw.rect(screen, color, (px, py, tile_size, tile_size))
+
+def draw_enemies(screen):
+    for enemy in enemy_data:
+        x = enemy["x"] * tile_size - scroll
+        y = enemy["y"] * tile_size
+
+        if enemy["type"] == "walker":
+            pygame.draw.rect(screen, blue, (x, y, tile_size, tile_size))
+
+        if enemy["type"] == "jumper":
+            pygame.draw.rect(screen, orange, (x, y, tile_size, tile_size))
+
+def draw_platforms(screen):
+    for platform in platform_data:
+        x = platform["x"] * tile_size - scroll
+        y = platform["y"] * tile_size
+
+        pygame.draw.rect(screen, purple, (x, y, tile_size, tile_size))
+
+def draw_paths(screen):
+    #walker paths
+    for enemy in enemy_data:
+        if enemy["type"] == "walker" and "end_x" in enemy and "end_y" in enemy:
+            start_x = enemy["x"]
+            start_y = enemy["y"]
+            end_x = enemy["end_x"]
+            end_y = enemy["end_y"]
+
+            start_pos = (start_x * tile_size - scroll + tile_size // 2,start_y * tile_size + tile_size // 2)
+            middle_pos = (end_x * tile_size - scroll + tile_size // 2,start_y * tile_size + tile_size // 2)
+            end_pos = (end_x * tile_size - scroll + tile_size // 2,end_y * tile_size + tile_size // 2)
+
+            pygame.draw.line(screen, white, start_pos, middle_pos, 3)
+            pygame.draw.line(screen, white, middle_pos, end_pos, 3)
+
+    #platform paths
+    for platform in platform_data:
+        if "end_x" in platform and "end_y" in platform:
+            start_x = platform["x"]
+            start_y = platform["y"]
+            end_x = platform["end_x"]
+            end_y = platform["end_y"]
+
+            start_pos = (start_x * tile_size - scroll + tile_size // 2,start_y * tile_size + tile_size // 2)
+            middle_pos = (end_x * tile_size - scroll + tile_size // 2,start_y * tile_size + tile_size // 2)
+            end_pos = (end_x * tile_size - scroll + tile_size // 2,end_y * tile_size + tile_size // 2)
+
+            pygame.draw.line(screen, white, start_pos, middle_pos, 3)
+            pygame.draw.line(screen, white, middle_pos, end_pos, 3)
 
 def save_level():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -167,12 +234,21 @@ def save_level():
     os.makedirs(folder, exist_ok=True)
     filename = os.path.join(folder, f"level{level}_data.json")
 
+    level_data = {
+        "tiles": map_data,
+        "enemies": enemy_data,
+        "platforms": platform_data
+    }
+
     with open(filename, "w") as f:
-        json.dump(map_data, f)
+        json.dump(level_data, f)
+    print("Level saved")
 
 def load_level():
     scroll = 0
     global map_data  #modifying
+    global enemy_data
+    global platform_data
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     folder = os.path.join(script_dir, "custom_levels")
@@ -181,7 +257,18 @@ def load_level():
     if os.path.exists(filename):
         try:
             with open(filename, "r") as f:
-                map_data = json.load(f)
+                level_data = json.load(f)
+
+                map_data.clear()
+                map_data.extend(level_data.get("tiles", []))
+
+                enemy_data.clear()
+                enemy_data.extend(level_data.get("enemies", []))
+
+                platform_data.clear()
+                platform_data.extend(level_data.get("platforms", []))
+                
+                print("Level loaded")
         except Exception as e:
             print("Failed to load level:", e)
     else:
@@ -194,6 +281,8 @@ def run_editor(screen, clock):
 
     global scroll_left, scroll_right, scroll
     global level
+
+    placing_object = None
 
     scroll_left = False
     scroll_right = False
@@ -244,9 +333,71 @@ def run_editor(screen, clock):
                 if event.key == pygame.K_DOWN:
                     level -= 1
 
+            #placing blox in the grid
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+
+                if mouse_x < full_width and mouse_y < full_height:
+
+                    grid_x = (mouse_x + scroll) // tile_size
+                    grid_y = mouse_y // tile_size
+
+                    if 0 <= grid_y < rows and 0 <= grid_x < max_collums:
+
+                        if event.button == 1:  #left adds
+                            tile = palette.selected_tile
+
+                            if tile == 5:
+                                enemy_data.append({
+                                    "type": "jumper",
+                                    "x": grid_x,
+                                    "y": grid_y,
+                                    "jump_height": 3,
+                                    "jump_delay": 60
+                                })
+
+                            if tile == 4:
+                                if placing_object is None:
+                                    placing_object = {
+                                        "type": "walker",
+                                        "start_x": grid_x,
+                                        "start_y": grid_y
+                                    }
+                                else:
+                                    enemy_data.append({
+                                        "type": "walker",
+                                        "x": placing_object["start_x"],
+                                        "y": placing_object["start_y"],
+                                        "end_x": grid_x,
+                                        "end_y": grid_y,
+                                        "speed": 2
+                                    })
+                                    placing_object = None
+
+                            if tile == 6:
+                                if placing_object is None:
+                                    placing_object = {
+                                        "type": "platform",
+                                        "start_x": grid_x,
+                                        "start_y": grid_y
+                                    }
+                                else:
+                                    platform_data.append({
+                                        "x": placing_object["start_x"],
+                                        "y": placing_object["start_y"],
+                                        "end_x": grid_x,
+                                        "end_y": grid_y,
+                                        "speed": 2
+                                    })
+                                    placing_object = None
+
         draw_background(screen)
         draw_grid(screen)  
-        draw_world_tiles(screen)
+        draw_world_tiles(screen, placing_object)
+        draw_enemies(screen)
+        draw_platforms(screen)
+        draw_paths(screen)
+
         #tile panel
         pygame.draw.rect(screen, gray, (full_width, 0, side_margin, full_height + 1))  
 
@@ -265,33 +416,47 @@ def run_editor(screen, clock):
         if scroll_right == True and scroll < (max_collums * tile_size) - full_width:
             scroll += 5 
 
-        #placing blox in the grid
         mouse_x, mouse_y = pygame.mouse.get_pos()
         mouse_buttons = pygame.mouse.get_pressed()
 
         if mouse_x < full_width and mouse_y < full_height:
-
             grid_x = (mouse_x + scroll) // tile_size
             grid_y = mouse_y // tile_size
 
             if 0 <= grid_y < rows and 0 <= grid_x < max_collums:
-
-                if mouse_buttons[0]:  #left adds
+                # Left button → draw tile
+                if mouse_buttons[0]:
                     tile = palette.selected_tile
+                    if tile <= 3:  # Only map tiles, not entities
+                        map_data[grid_y][grid_x] = tile
 
-                    if tile in (2, 3):  #start and finish
-
-                        #Remove old start and finih
-                        for y, row in enumerate(map_data):
-                            for x, value in enumerate(row):
-                                if value == tile:
-                                    map_data[y][x] = -1
-
-                    map_data[grid_y][grid_x] = tile
-
-                if mouse_buttons[2]:  #right deletes
+                # Right button → erase tile
+                if mouse_buttons[2]:
                     map_data[grid_y][grid_x] = -1
 
+                    enemy_data[:] = [
+                        enemy for enemy in enemy_data
+                        if not (
+                            (enemy["x"] == grid_x and enemy["y"] == grid_y)  # start
+                            or
+                            (enemy.get("end_x") == grid_x and enemy.get("end_y") == grid_y)  # end
+                        )
+                    ]
+
+                    # Remove any platform whose start or end is at this tile
+                    platform_data[:] = [
+                        platform for platform in platform_data
+                        if not (
+                            (platform["x"] == grid_x and platform["y"] == grid_y)  # start
+                            or
+                            (platform.get("end_x") == grid_x and platform.get("end_y") == grid_y)  # end
+                        )
+                    ]
+
+                    # If user was placing a new walker/platform, cancel it if start is deleted
+                    if placing_object is not None:
+                        if placing_object["start_x"] == grid_x and placing_object["start_y"] == grid_y:
+                            placing_object = None
 
         pygame.display.update()
         clock.tick(FPS)
