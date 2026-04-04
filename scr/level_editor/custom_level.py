@@ -15,10 +15,13 @@ max_collums = 150
 green = (144, 201, 120)
 white = (255, 255, 255)
 red = (200, 25, 25)
+blue = (0, 0, 255)
 black = (25, 25, 25)
 brown = (139, 69, 19)
 gray = (120, 120, 120)
+purple = (128, 0, 128)
 yellow = (255, 215, 0)
+orange = (255, 165, 0)
 
 #tiles
 tile_size = full_height // rows
@@ -30,17 +33,35 @@ tile_colors = {
     0: white, 
     1: red,
     2: green,
-    3: black
+    3: black,
+    4: blue,      # walker start
+    5: orange,    # jumper
+    6: purple 
 }
 
+map_data = []
+enemy_data = []
+platform_data = []
+
 def load_level(level):
+    global map_data, enemy_data, platform_data
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     folder = os.path.join(script_dir, "custom_levels")
     filename = os.path.join(folder, f"{level}")
 
     if os.path.exists(filename):
         with open(filename, "r") as f:
-            return json.load(f)
+            level_data =  json.load(f)
+
+        map_data.clear()
+        map_data.extend(level_data.get("tiles", []))
+
+        enemy_data.clear()
+        enemy_data.extend(level_data.get("enemies", []))
+
+        platform_data.clear()
+        platform_data.extend(level_data.get("platforms", []))
     else:
         print("Level file does not exist!")
         return []
@@ -70,9 +91,88 @@ def draw_background(screen):
 
 #                 pygame.draw.rect(screen, color, (x * tile_size - scroll,y * tile_size, tile_size, tile_size))
 
+def update_entities():
+    #WALKERS
+    for enemy in enemy_data:
+        if enemy["type"] == "walker":
+            if "dir" not in enemy:
+                enemy["dir"] = 1  #end first
+                enemy["_start_x"] = enemy["x"]  #runtime start x
+                enemy["_start_y"] = enemy["y"]  #runtime start y
+
+            target_x = enemy["end_x"] if enemy["dir"] == 1 else enemy["_start_x"]
+            target_y = enemy["end_y"] if enemy["dir"] == 1 else enemy["_start_y"]
+
+            #horizontal first
+            if enemy["x"] != target_x:
+                step = enemy.get("speed") * enemy["dir"]
+                enemy["x"] += step
+                if (enemy["dir"] == 1 and enemy["x"] >= target_x) or (enemy["dir"] == -1 and enemy["x"] <= target_x):
+                    enemy["x"] = target_x
+
+            #vertical
+            elif enemy["y"] != target_y:
+                step = enemy.get("speed") * enemy["dir"]
+                enemy["y"] += step
+                if (enemy["dir"] == 1 and enemy["y"] >= target_y) or (enemy["dir"] == -1 and enemy["y"] <= target_y):
+                    enemy["y"] = target_y
+
+            #switch
+            if enemy["x"] == target_x and enemy["y"] == target_y:
+                enemy["dir"] *= -1
+
+        if enemy["type"] == "jumper":
+            if "jump_timer" not in enemy:
+                enemy["jump_timer"] = 0
+                enemy["vel_y"] = 0
+                enemy["_ground_y"] = enemy["y"]
+
+            #timer
+            enemy["jump_timer"] += 1
+            if enemy["jump_timer"] >= enemy.get("jump_delay"):
+                enemy["jump_timer"] = 0
+                enemy["vel_y"] = - 0.27 * enemy.get("jump_height")
+
+            #gravity
+            enemy["vel_y"] += 0.1
+            enemy["y"] += enemy["vel_y"]
+
+            #land
+            if enemy["y"] > enemy["_ground_y"]:
+                enemy["y"] = enemy["_ground_y"]
+                enemy["vel_y"] = 0
+
+    #PLATFORMS
+    for platform in platform_data:
+        if "dir" not in platform:
+            platform["dir"] = 1 #end first
+            platform["_start_x"] = platform["x"]  #runtime start x
+            platform["_start_y"] = platform["y"]  #runtime start y
+
+        target_x = platform["end_x"] if platform["dir"] == 1 else platform["_start_x"]
+        target_y = platform["end_y"] if platform["dir"] == 1 else platform["_start_y"]
+
+        #horizontal first
+        if platform["x"] != target_x:
+            step = platform.get("speed") * platform["dir"]
+            platform["x"] += step
+            if (platform["dir"] == 1 and platform["x"] >= target_x) or (platform["dir"] == -1 and platform["x"] <= target_x):
+                platform["x"] = target_x
+
+        #vertical
+        elif platform["y"] != target_y:
+            step = platform.get("speed") * platform["dir"]
+            platform["y"] += step
+            if (platform["dir"] == 1 and platform["y"] >= target_y) or (platform["dir"] == -1 and platform["y"] <= target_y):
+                platform["y"] = target_y
+
+        #switch
+        if platform["x"] == target_x and platform["y"] == target_y:
+            platform["dir"] *= -1
+
 def run_custom_level(screen, clock, level):
 
-    map_data = load_level(level)
+    load_level(level)
 
     spawn_x = 100 
     spawn_y = 100
@@ -154,7 +254,6 @@ def run_custom_level(screen, clock, level):
         # vertical bs
         player.y += vel_y
         on_ground = False
-
         for tile in colliders:
             if player.colliderect(tile):
                 if vel_y > 0:
@@ -179,9 +278,11 @@ def run_custom_level(screen, clock, level):
             if player.colliderect(collider):
                 print("YOU WON")
                 return "custom_levels"
+            
+        # for platform in platform_data:
+        #     platform_rect = pygame.Rect(platform["x"] * tile_size, platform["y"] * tile_size, tile_size, tile_size)
         
         # world shall obey me
-
         camera_x = player.centerx - full_width // 2
 
         if camera_x < 0:
@@ -191,6 +292,7 @@ def run_custom_level(screen, clock, level):
 
 
         draw_background(screen)
+        update_entities()
 
         for y, row in enumerate(map_data):
             for x, tile in enumerate(row):
@@ -202,9 +304,28 @@ def run_custom_level(screen, clock, level):
                     pygame.draw.rect(screen, tile_colors[2],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
                 if tile == 3:
                     pygame.draw.rect(screen, tile_colors[3],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
+        
+        for enemy in enemy_data:
+            if enemy["type"] == "walker":
+                color = blue 
+            elif enemy["type"] == "jumper":
+                color = orange 
+
+            enemy_rect = pygame.Rect(enemy["x"] * tile_size - camera_x, enemy["y"] * tile_size, tile_size, tile_size)
+            pygame.draw.rect(screen, color, enemy_rect)
+            
+            if player.colliderect(enemy_rect):
+                print("WHY ARE YOU DAD?")
+                return "custom_levels"
+            
+
+        for platform in platform_data:
+            platform_rect = pygame.Rect(platform["x"] * tile_size - camera_x, platform["y"] * tile_size, tile_size, tile_size)
+            pygame.draw.rect(screen, purple, platform_rect)
+            # colliders.append(platform_rect)
 
         # Weeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        pygame.draw.rect(screen,white,( player.x - camera_x, player.y, player.width, player.height))
+        pygame.draw.rect(screen,yellow,( player.x - camera_x, player.y, player.width, player.height))
 
         text = nadpisy.render(f"Custom level: {level}", True, white)
         screen.blit(text, (20, 20))
