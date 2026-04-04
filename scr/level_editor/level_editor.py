@@ -353,7 +353,7 @@ def run_editor(screen, clock):
                                     "x": grid_x,
                                     "y": grid_y,
                                     "jump_height": 3,
-                                    "jump_delay": 60
+                                    "jump_delay": 180
                                 })
 
                             if tile == 4:
@@ -370,7 +370,7 @@ def run_editor(screen, clock):
                                         "y": placing_object["start_y"],
                                         "end_x": grid_x,
                                         "end_y": grid_y,
-                                        "speed": 2
+                                        "speed": 0.1
                                     })
                                     placing_object = None
 
@@ -387,7 +387,7 @@ def run_editor(screen, clock):
                                         "y": placing_object["start_y"],
                                         "end_x": grid_x,
                                         "end_y": grid_y,
-                                        "speed": 2
+                                        "speed": 0.1
                                     })
                                     placing_object = None
 
@@ -424,36 +424,36 @@ def run_editor(screen, clock):
             grid_y = mouse_y // tile_size
 
             if 0 <= grid_y < rows and 0 <= grid_x < max_collums:
-                # Left button → draw tile
+                #left draw
                 if mouse_buttons[0]:
                     tile = palette.selected_tile
-                    if tile <= 3:  # Only map tiles, not entities
+                    if tile <= 3:  #tiles
                         map_data[grid_y][grid_x] = tile
 
-                # Right button → erase tile
+                #right delete
                 if mouse_buttons[2]:
                     map_data[grid_y][grid_x] = -1
 
                     enemy_data[:] = [
                         enemy for enemy in enemy_data
                         if not (
-                            (enemy["x"] == grid_x and enemy["y"] == grid_y)  # start
+                            (enemy["x"] == grid_x and enemy["y"] == grid_y)  #start
                             or
-                            (enemy.get("end_x") == grid_x and enemy.get("end_y") == grid_y)  # end
+                            (enemy.get("end_x") == grid_x and enemy.get("end_y") == grid_y)  #end
                         )
                     ]
 
-                    # Remove any platform whose start or end is at this tile
+                    #Remove platform 
                     platform_data[:] = [
                         platform for platform in platform_data
                         if not (
-                            (platform["x"] == grid_x and platform["y"] == grid_y)  # start
+                            (platform["x"] == grid_x and platform["y"] == grid_y)  #start
                             or
-                            (platform.get("end_x") == grid_x and platform.get("end_y") == grid_y)  # end
+                            (platform.get("end_x") == grid_x and platform.get("end_y") == grid_y)  #end
                         )
                     ]
 
-                    # If user was placing a new walker/platform, cancel it if start is deleted
+                    # user placing new entity cancel it if start is deleted
                     if placing_object is not None:
                         if placing_object["start_x"] == grid_x and placing_object["start_y"] == grid_y:
                             placing_object = None
