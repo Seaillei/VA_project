@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>src.level_editor package &#8212; src  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src.main_menu package" href="src.main_menu.html" />
+    <link rel="prev" title="src.level package" href="src.level.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="src-level-editor-package">
+<h1>src.level_editor package<a class="headerlink" href="#src-level-editor-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-src.level_editor.custom_level">
+<span id="src-level-editor-custom-level-module"></span><h2>src.level_editor.custom_level module<a class="headerlink" href="#module-src.level_editor.custom_level" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level.draw_background">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level.</span></span><span class="sig-name descname"><span class="pre">draw_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level.html#draw_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level.draw_background" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level.load_level">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level.</span></span><span class="sig-name descname"><span class="pre">load_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level.html#load_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level.load_level" title="Link to this definition">¶</a></dt>
+<dd><p>Handles loading individual levels from files.</p>
+<p>Reads a JSON level file from the ‘levels’ folder, parses its contents, 
+and populates the global map_data, enemy_data, and platform_data lists 
+used to construct and update the active level.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level.outputing_text">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level.</span></span><span class="sig-name descname"><span class="pre">outputing_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level.html#outputing_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level.outputing_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level.run_custom_level">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level.</span></span><span class="sig-name descname"><span class="pre">run_custom_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level.html#run_custom_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level.run_custom_level" title="Link to this definition">¶</a></dt>
+<dd><p>Handles running and the functionality of the level.</p>
+<p>Runs the primary game loop for an active level. It processes player physics 
+(gravity, horizontal movement, jumping), resolves tile and moving-platform 
+collisions, tracks the side-scrolling camera, and handles win/loss states.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level.update_entities">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level.</span></span><span class="sig-name descname"><span class="pre">update_entities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level.html#update_entities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level.update_entities" title="Link to this definition">¶</a></dt>
+<dd><p>Handles the movement of different entities.</p>
+<p>Loops through all active enemies and moving platforms to update their 
+positions. Manages automated pacing behaviors, gravity/jumping delays 
+for ‘jumper’ enemies, and captures historical positions for platforms.</p>
+</dd></dl>
+
+</section>
+<section id="module-src.level_editor.custom_level_menu">
+<span id="src-level-editor-custom-level-menu-module"></span><h2>src.level_editor.custom_level_menu module<a class="headerlink" href="#module-src.level_editor.custom_level_menu" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.Menu_Button">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level_menu.</span></span><span class="sig-name descname"><span class="pre">Menu_Button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#Menu_Button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.Menu_Button" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A reusable UI element representing a clickable screen button.</p>
+<p>Handles positioning, geometric rendering, centering display text, 
+detecting left-clicks on its bounding box, and executing a pre-assigned 
+callback action when clicked.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.Menu_Button.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#Menu_Button.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.Menu_Button.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.Menu_Button.handle_event">
+<span class="sig-name descname"><span class="pre">handle_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#Menu_Button.handle_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.Menu_Button.handle_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.get_available_levels">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level_menu.</span></span><span class="sig-name descname"><span class="pre">get_available_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#get_available_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.get_available_levels" title="Link to this definition">¶</a></dt>
+<dd><p>Finds and indexes available game levels from local files.</p>
+<p>Scans the designated ‘levels’ directory for files that strictly follow 
+the format naming rule ‘level…_data.json’, and returns an alphabetically 
+sorted list of those filenames.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.run_custom_menu">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level_menu.</span></span><span class="sig-name descname"><span class="pre">run_custom_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#run_custom_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.run_custom_menu" title="Link to this definition">¶</a></dt>
+<dd><p>Handles running and the functionality of the level selection menu.</p>
+<p>Dynamically populates the screen with selectable buttons for every discovered 
+level file. It manages the loop that listens for mouse clicks on buttons, 
+handles background rendering, and forwards navigation states back to the game controller.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.to_level">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level_menu.</span></span><span class="sig-name descname"><span class="pre">to_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#to_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.to_level" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.custom_level_menu.to_menu">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.custom_level_menu.</span></span><span class="sig-name descname"><span class="pre">to_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/src/level_editor/custom_level_menu.html#to_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.custom_level_menu.to_menu" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.level_editor.level_editor">
+<span id="src-level-editor-level-editor-module"></span><h2>src.level_editor.level_editor module<a class="headerlink" href="#module-src.level_editor.level_editor" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tile_button">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">Tile_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tile_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tile_button" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A specialized button component representing an item in the editor palette.</p>
+<p>Manages fixed-size squares (64x64 pixels) containing tile types, hazards, 
+or entity definitions. It handles rendering its assigned identification text 
+and checks if the mouse left-clicked its boundaries.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tile_button.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tile_button.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tile_button.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tile_button.is_clicked">
+<span class="sig-name descname"><span class="pre">is_clicked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tile_button.is_clicked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tile_button.is_clicked" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tiles">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">Tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tiles" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages the editor’s item selection layout panel.</p>
+<p>Constructs a structural panel array of selectable game elements on the sidebar. 
+It tracks which entity or environmental block index is active for painting 
+actions and highlights the active selection with a clean border outline.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tiles.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tiles.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tiles.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.Tiles.handle_event">
+<span class="sig-name descname"><span class="pre">handle_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#Tiles.handle_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.Tiles.handle_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.UI_Button">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">UI_Button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#UI_Button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.UI_Button" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A general-purpose button component for application controls.</p>
+<p>Manages layout execution tasks for the tool interface, rendering background 
+shapes and text prompts. It evaluates event clicks to fire action callback triggers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.UI_Button.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#UI_Button.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.UI_Button.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.UI_Button.handle_event">
+<span class="sig-name descname"><span class="pre">handle_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#UI_Button.handle_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.UI_Button.handle_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_background">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_background" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_enemies">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_enemies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_enemies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_enemies" title="Link to this definition">¶</a></dt>
+<dd><p>Handles rendering all active enemy types onto the screen.</p>
+<p>Iterates through the enemy database to determine whether a placement 
+represents a ‘walker’ or a ‘jumper’. It scales their coordinate values into 
+pixel screen spaces and offsets them based on horizontal camera panning.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_grid">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_grid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_paths">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_paths" title="Link to this definition">¶</a></dt>
+<dd><p>Handles rendering the movement paths of patrols and platforms.</p>
+<p>Calculates geometric center coordinates for path points, drawing explicit 
+connecting lines from an entity’s initial placement point to its final destination 
+boundaries to visually chart movement ranges inside the layout workspace.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_platforms">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_platforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_platforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_platforms" title="Link to this definition">¶</a></dt>
+<dd><p>Handles rendering moving platforms onto the screen layout.</p>
+<p>Processes positions tracked inside the platform configuration array, 
+drawing color-coded rectangles adjusted to align properly with active 
+world camera scrolling coordinates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.draw_world_tiles">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">draw_world_tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placing_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#draw_world_tiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.draw_world_tiles" title="Link to this definition">¶</a></dt>
+<dd><p>Handles rendering the map grid tiles and placement previews.</p>
+<p>Loops through the 2D map array to draw static environmental blocks adjusted 
+for camera scroll. If a user is currently plotting a two-stage path object 
+(like a walker or moving platform), it overlays a temporary ghost tile 
+at the designated start coordinates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.load_level">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">load_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#load_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.load_level" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a saved file composition back into memory.</p>
+<p>Attempts to locate and parse a level file matching the targeted global index. 
+If found, it safely resets any active geometry arrays, updating the editor 
+grid state back to the historical save point.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.outputing_text">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">outputing_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#outputing_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.outputing_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.run_editor">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">run_editor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#run_editor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.run_editor" title="Link to this definition">¶</a></dt>
+<dd><p>Manages the full loop system for the map composition suite.</p>
+<p>Runs the level editor mode. It continuously tracks mouse coordinate grid snaps, 
+interprets keyboard scroll speeds, processes placement patterns for two-stage 
+path variables (Walkers and Platforms), updates live layer view screens, and 
+cleans deleted coordinates upon right-click actions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.save_level">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">save_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#save_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.save_level" title="Link to this definition">¶</a></dt>
+<dd><p>Serializes the current grid setup into an external file.</p>
+<p>Packages the existing map structure matrix, enemy dictionary configurations, 
+and path tracking platforms into a clean nested file layout, saving it inside 
+the ‘custom_levels’ folder using a JSON naming pattern.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.level_editor.level_editor.to_menu">
+<span class="sig-prename descclassname"><span class="pre">src.level_editor.level_editor.</span></span><span class="sig-name descname"><span class="pre">to_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/src/level_editor/level_editor.html#to_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.level_editor.level_editor.to_menu" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-src.level_editor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.level_editor" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">src</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.level.html">src.level package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.level_editor package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-src.level_editor.custom_level">src.level_editor.custom_level module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-src.level_editor.custom_level_menu">src.level_editor.custom_level_menu module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-src.level_editor.level_editor">src.level_editor.level_editor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-src.level_editor">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.main_menu.html">src.main_menu package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.main">src.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="src.html">src package</a><ul>
+      <li>Previous: <a href="src.level.html" title="previous chapter">src.level package</a></li>
+      <li>Next: <a href="src.main_menu.html" title="next chapter">src.main_menu package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Author.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/src.level_editor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

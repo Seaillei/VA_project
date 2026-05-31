@@ -8,7 +8,14 @@ full_width = 1100
 full_height = 740
 
 class Menu_Button():
-    def __init__(self, x, y, width, height, color, action=None, text="", font=None, text_color=(0, 0, 0)):
+    """A reusable UI element representing a clickable screen button.
+
+    Handles positioning, geometric rendering, centering display text, 
+    detecting left-clicks on its bounding box, and executing a pre-assigned 
+    callback action when clicked.
+    """
+
+    def __init__(self, x: float, y: float, width: int, height: int, color: tuple, action=None, text: str = "", font=None, text_color: tuple = (0, 0, 0)) -> None:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.action = action
@@ -16,7 +23,7 @@ class Menu_Button():
         self.text_color = text_color
         self.font = font
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, self.rect)
 
         if self.text != "":
@@ -25,7 +32,7 @@ class Menu_Button():
 
             screen.blit(text_surface, text_rect)
 
-    def handle_event(self, event):
+    def handle_event(self, event) -> tuple | str | None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
@@ -41,20 +48,34 @@ brown = (139, 69, 19)
 gray = (120, 120, 120)
 yellow = (255, 215, 0)
 
-def get_available_levels():
+def get_available_levels() -> list:
+    """Finds and indexes available game levels from local files.
+
+    Scans the designated 'levels' directory for files that strictly follow 
+    the format naming rule 'level..._data.json', and returns an alphabetically 
+    sorted list of those filenames.
+    """
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     folder = os.path.join(script_dir, "levels")
     if not os.path.exists(folder):
         return []
     return sorted([f for f in os.listdir(folder) if f.startswith("level") and f.endswith("_data.json")])
 
-def to_menu():
+def to_menu() -> str:
     return "menu"
 
-def to_level(level_name):
+def to_level(level_name: str) -> tuple:
     return ("standard", level_name)
 
-def run_level_menu(screen, clock):
+def run_level_menu(screen, clock) -> tuple | str:
+    """Handles running and the functionality of the level selection menu.
+
+    Dynamically populates the screen with selectable buttons for every discovered 
+    level file. It manages the loop that listens for mouse clicks on buttons, 
+    handles background rendering, and forwards navigation states back to the game controller.
+    """
+
     #font
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)

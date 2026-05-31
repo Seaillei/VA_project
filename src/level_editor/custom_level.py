@@ -43,7 +43,14 @@ map_data = []
 enemy_data = []
 platform_data = []
 
-def load_level(level):
+def load_level(level: str) -> list | None:
+    """Handles loading individual levels from files.
+
+    Reads a JSON level file from the 'levels' folder, parses its contents, 
+    and populates the global map_data, enemy_data, and platform_data lists 
+    used to construct and update the active level.
+    """
+
     global map_data, enemy_data, platform_data
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -67,11 +74,11 @@ def load_level(level):
         return []
 
 #functions
-def outputing_text(text, font, text_col, x, y, screen):
+def outputing_text(text: str, font, text_col: tuple, x: float, y: float, screen) -> None:
     write = font.render(text, True, text_col)
     screen.blit(write, (x, y))
 
-def draw_background(screen):
+def draw_background(screen) -> None:
     screen.fill(gray)
 
 # def draw_grid(screen):
@@ -91,7 +98,13 @@ def draw_background(screen):
 
 #                 pygame.draw.rect(screen, color, (x * tile_size - scroll,y * tile_size, tile_size, tile_size))
 
-def update_entities():
+def update_entities() -> None:
+    """Handles the movement of different entities.
+
+    Loops through all active enemies and moving platforms to update their 
+    positions. Manages automated pacing behaviors, gravity/jumping delays 
+    for 'jumper' enemies, and captures historical positions for platforms.
+    """
     #WALKERS
     for enemy in enemy_data:
         if enemy["type"] == "walker":
@@ -176,7 +189,13 @@ def update_entities():
         if platform["x"] == target_x and platform["y"] == target_y:
             platform["dir"] *= -1
 
-def run_custom_level(screen, clock, level):
+def run_custom_level(screen, clock, level: str) -> str:
+    """Handles running and the functionality of the level.
+
+    Runs the primary game loop for an active level. It processes player physics 
+    (gravity, horizontal movement, jumping), resolves tile and moving-platform 
+    collisions, tracks the side-scrolling camera, and handles win/loss states.
+    """
 
     load_level(level)
 

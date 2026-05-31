@@ -14,7 +14,14 @@ side_margin = 300
 #EVERYTHING TO DEFY FOR THE GAME
 
 class Tile_button():
-    def __init__(self, x, y, background, tile_id, font, text="", text_color=(0,0,0)):
+    """A specialized button component representing an item in the editor palette.
+
+    Manages fixed-size squares (64x64 pixels) containing tile types, hazards, 
+    or entity definitions. It handles rendering its assigned identification text 
+    and checks if the mouse left-clicked its boundaries.
+    """
+
+    def __init__(self, x: float, y: float, background: tuple, tile_id: int, font, text: str = "", text_color: tuple = (0, 0, 0)) -> None:
         self.background = background
         self.tile_id = tile_id
         # self.rect = self.background.get_rect()
@@ -24,7 +31,7 @@ class Tile_button():
         self.text_color = text_color
         self.rect = pygame.Rect(x, y, 64, 64)
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         # screen.blit(self.background, (self.rect.x, self.rect.y))
         pygame.draw.rect(screen, self.background, self.rect)
 
@@ -34,7 +41,7 @@ class Tile_button():
 
             screen.blit(text_surface, text_rect)
 
-    def is_clicked(self, event):
+    def is_clicked(self, event) -> bool:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # left click
                 if self.rect.collidepoint(event.pos):
@@ -42,7 +49,13 @@ class Tile_button():
         return False
 
 class UI_Button():
-    def __init__(self, x, y, width, height, color, action=None, text="", font=None, text_color=(0, 0, 0)):
+    """A general-purpose button component for application controls.
+
+    Manages layout execution tasks for the tool interface, rendering background 
+    shapes and text prompts. It evaluates event clicks to fire action callback triggers.
+    """
+
+    def __init__(self, x: float, y: float, width: int, height: int, color: tuple, action=None, text: str = "", font=None, text_color: tuple = (0, 0, 0)) -> None:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.action = action
@@ -50,7 +63,7 @@ class UI_Button():
         self.text_color = text_color
         self.font = font
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, self.rect)
 
         if self.text != "":
@@ -59,7 +72,7 @@ class UI_Button():
 
             screen.blit(text_surface, text_rect)
 
-    def handle_event(self, event):
+    def handle_event(self, event) -> str | None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
@@ -67,7 +80,14 @@ class UI_Button():
         return None
 
 class Tiles:
-    def __init__(self, font):
+    """Manages the editor's item selection layout panel.
+
+    Constructs a structural panel array of selectable game elements on the sidebar. 
+    It tracks which entity or environmental block index is active for painting 
+    actions and highlights the active selection with a clean border outline.
+    """
+
+    def __init__(self, font) -> None:
         self.buttons = []
 
         self.buttons.append(Tile_button(full_width + 50, 50, white, 0, font, "TILE", black))
@@ -80,13 +100,13 @@ class Tiles:
 
         self.selected_tile = 0
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         for button in self.buttons:
             button.draw(screen)
 
         pygame.draw.rect(screen,(0,0,0),self.buttons[self.selected_tile].rect,3)
 
-    def handle_event(self, event):
+    def handle_event(self, event) -> None:
         for button in self.buttons:
             if button.is_clicked(event):
                 self.selected_tile = button.tile_id
@@ -149,14 +169,14 @@ for row in range(rows):
     map_data.append(all_rows)   
 
 #functions
-def outputing_text(text, font, text_col, x, y, screen):
+def outputing_text(text: str, font, text_col: tuple, x: float, y: float, screen) -> None:
     write = font.render(text, True, text_col)
     screen.blit(write, (x, y))
 
-def draw_background(screen):
+def draw_background(screen) -> None:
     screen.fill(gray)
 
-def draw_grid(screen):
+def draw_grid(screen) -> None:
     #verticaly
     for c in range(max_collums + 1):
         pygame.draw.line(screen, white, (c * tile_size - scroll, 0), (c * tile_size - scroll, full_height))
@@ -165,7 +185,15 @@ def draw_grid(screen):
     for c in range(rows + 1):
         pygame.draw.line(screen, white, (0, c * tile_size), (full_width, c * tile_size))
 
-def draw_world_tiles(screen, placing_object=None):
+def draw_world_tiles(screen, placing_object: dict | None = None) -> None:
+    """Handles rendering the map grid tiles and placement previews.
+
+    Loops through the 2D map array to draw static environmental blocks adjusted 
+    for camera scroll. If a user is currently plotting a two-stage path object 
+    (like a walker or moving platform), it overlays a temporary ghost tile 
+    at the designated start coordinates.
+    """
+
     for y, row in enumerate(map_data):
         for x, tile in enumerate(row):
             if tile != -1:
@@ -179,7 +207,14 @@ def draw_world_tiles(screen, placing_object=None):
         color = blue if placing_object["type"] == "walker" else purple
         pygame.draw.rect(screen, color, (px, py, tile_size, tile_size))
 
-def draw_enemies(screen):
+def draw_enemies(screen) -> None:
+    """Handles rendering all active enemy types onto the screen.
+
+    Iterates through the enemy database to determine whether a placement 
+    represents a 'walker' or a 'jumper'. It scales their coordinate values into 
+    pixel screen spaces and offsets them based on horizontal camera panning.
+    """
+
     for enemy in enemy_data:
         x = enemy["x"] * tile_size - scroll
         y = enemy["y"] * tile_size
@@ -190,14 +225,28 @@ def draw_enemies(screen):
         if enemy["type"] == "jumper":
             pygame.draw.rect(screen, orange, (x, y, tile_size, tile_size))
 
-def draw_platforms(screen):
+def draw_platforms(screen) -> None:
+    """Handles rendering moving platforms onto the screen layout.
+
+    Processes positions tracked inside the platform configuration array, 
+    drawing color-coded rectangles adjusted to align properly with active 
+    world camera scrolling coordinates.
+    """
+
     for platform in platform_data:
         x = platform["x"] * tile_size - scroll
         y = platform["y"] * tile_size
 
         pygame.draw.rect(screen, purple, (x, y, tile_size, tile_size))
 
-def draw_paths(screen):
+def draw_paths(screen) -> None:
+    """Handles rendering the movement paths of patrols and platforms.
+
+    Calculates geometric center coordinates for path points, drawing explicit 
+    connecting lines from an entity's initial placement point to its final destination 
+    boundaries to visually chart movement ranges inside the layout workspace.
+    """
+
     #walker paths
     for enemy in enemy_data:
         if enemy["type"] == "walker" and "end_x" in enemy and "end_y" in enemy:
@@ -228,7 +277,14 @@ def draw_paths(screen):
             pygame.draw.line(screen, white, start_pos, middle_pos, 3)
             pygame.draw.line(screen, white, middle_pos, end_pos, 3)
 
-def save_level():
+def save_level() -> None:
+    """Serializes the current grid setup into an external file.
+
+    Packages the existing map structure matrix, enemy dictionary configurations, 
+    and path tracking platforms into a clean nested file layout, saving it inside 
+    the 'custom_levels' folder using a JSON naming pattern.
+    """
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     folder = os.path.join(script_dir, "custom_levels")
     os.makedirs(folder, exist_ok=True)
@@ -244,7 +300,14 @@ def save_level():
         json.dump(level_data, f)
     print("Level saved")
 
-def load_level():
+def load_level() -> None:
+    """Loads a saved file composition back into memory.
+
+    Attempts to locate and parse a level file matching the targeted global index. 
+    If found, it safely resets any active geometry arrays, updating the editor 
+    grid state back to the historical save point.
+    """
+
     scroll = 0
     global map_data  #modifying
     global enemy_data
@@ -274,10 +337,17 @@ def load_level():
     else:
         print("Level file does not exist!")
 
-def to_menu():
+def to_menu() -> str:
     return "menu"
 
-def run_editor(screen, clock):
+def run_editor(screen, clock) -> str:
+    """Manages the full loop system for the map composition suite.
+
+    Runs the level editor mode. It continuously tracks mouse coordinate grid snaps, 
+    interprets keyboard scroll speeds, processes placement patterns for two-stage 
+    path variables (Walkers and Platforms), updates live layer view screens, and 
+    cleans deleted coordinates upon right-click actions.
+    """
 
     global scroll_left, scroll_right, scroll
     global level

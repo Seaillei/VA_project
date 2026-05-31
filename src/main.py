@@ -9,7 +9,15 @@ from level.level import run_level
 full_width = 1100
 full_height = 740
 
-def main():
+def main() -> None:
+    """Handles loading different parts of the game.
+    
+    Initializes the Pygame modules, sets up the display window, and manages 
+    the core game loop. It acts as a state controller, continuously switching 
+    between menus, the level editor, and active gameplay based on the value 
+    of the global game state.
+    """
+
     global current_state
     pygame.init()
     clock = pygame.time.Clock()
@@ -40,4 +48,5 @@ def main():
             elif level_type == "standard":
                 current_state = run_level(screen, clock, level_name)
 
-main()
+if __name__ == "__main__":
+    main()
