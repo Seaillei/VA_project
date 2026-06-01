@@ -72,6 +72,38 @@ def load_level(level: str) -> list | None:
     else:
         print("Level file does not exist!")
         return []
+    
+class Menu_Button():
+    """A reusable UI element representing a clickable screen button.
+
+    Handles positioning, geometric rendering, centering display text, 
+    detecting left-clicks on its bounding box, and executing a pre-assigned 
+    callback action when clicked.
+    """
+
+    def __init__(self, x: float, y: float, width: int, height: int, color: tuple, action=None, text: str = "", font=None, text_color: tuple = (0, 0, 0)) -> None:
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = color
+        self.action = action
+        self.text = text
+        self.text_color = text_color
+        self.font = font
+
+    def draw(self, screen) -> None:
+        pygame.draw.rect(screen, self.color, self.rect)
+
+        if self.text != "":
+            text_surface = self.font.render(self.text, True, self.text_color)
+            text_rect = text_surface.get_rect(center=self.rect.center)
+
+            screen.blit(text_surface, text_rect)
+
+    def handle_event(self, event) -> str | None:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and self.rect.collidepoint(event.pos):
+                if self.action:
+                    return self.action()
+        return None
 
 #functions
 def outputing_text(text: str, font, text_col: tuple, x: float, y: float, screen) -> None:
@@ -105,60 +137,64 @@ def update_entities() -> None:
     positions. Manages automated pacing behaviors, gravity/jumping delays 
     for 'jumper' enemies, and captures historical positions for platforms.
     """
-    #WALKERS
+    # WALKERS
     for enemy in enemy_data:
         if enemy["type"] == "walker":
-            if "dir" not in enemy:
-                enemy["dir"] = 1  #end first
-                enemy["_start_x"] = enemy["x"]  #runtime start x
-                enemy["_start_y"] = enemy["y"]  #runtime start y
+            if "moving_to_end" not in enemy:
+                enemy["moving_to_end"] = True  # True means moving to end, False means returning to start
+                enemy["_start_x"] = enemy["x"]
+                enemy["_start_y"] = enemy["y"]
 
-            target_x = enemy["end_x"] if enemy["dir"] == 1 else enemy["_start_x"]
-            target_y = enemy["end_y"] if enemy["dir"] == 1 else enemy["_start_y"]
+            target_x = enemy["end_x"] if enemy["moving_to_end"] else enemy["_start_x"]
+            target_y = enemy["end_y"] if enemy["moving_to_end"] else enemy["_start_y"]
 
-            #horizontal first
+            # Determine explicit direction step
+            speed = enemy.get("speed", 1)
+
+            # Horizontal first
             if enemy["x"] != target_x:
-                step = enemy.get("speed") * enemy["dir"]
-                enemy["x"] += step
-                if (enemy["dir"] == 1 and enemy["x"] >= target_x) or (enemy["dir"] == -1 and enemy["x"] <= target_x):
-                    enemy["x"] = target_x
+                if enemy["x"] < target_x:
+                    enemy["x"] = min(target_x, enemy["x"] + speed)
+                else:
+                    enemy["x"] = max(target_x, enemy["x"] - speed)
 
-            #vertical
+            # Vertical second (only if horizontal movement for this leg is done)
             elif enemy["y"] != target_y:
-                step = enemy.get("speed") * enemy["dir"]
-                enemy["y"] += step
-                if (enemy["dir"] == 1 and enemy["y"] >= target_y) or (enemy["dir"] == -1 and enemy["y"] <= target_y):
-                    enemy["y"] = target_y
+                if enemy["y"] < target_y:
+                    enemy["y"] = min(target_y, enemy["y"] + speed)
+                else:
+                    enemy["y"] = max(target_y, enemy["y"] - speed)
 
-            #switch
+            # Switch destination state only when the exact target position is reached
             if enemy["x"] == target_x and enemy["y"] == target_y:
-                enemy["dir"] *= -1
+                enemy["moving_to_end"] = not enemy["moving_to_end"]
 
+        # JUMPERS
         if enemy["type"] == "jumper":
             if "jump_timer" not in enemy:
                 enemy["jump_timer"] = 0
                 enemy["vel_y"] = 0
                 enemy["_ground_y"] = enemy["y"]
 
-            #timer
+            # timer
             enemy["jump_timer"] += 1
             if enemy["jump_timer"] >= enemy.get("jump_delay"):
                 enemy["jump_timer"] = 0
-                enemy["vel_y"] = - 0.27 * enemy.get("jump_height")
+                enemy["vel_y"] = -0.27 * enemy.get("jump_height")
 
-            #gravity
+            # gravity
             enemy["vel_y"] += 0.1
             enemy["y"] += enemy["vel_y"]
 
-            #land
+            # land
             if enemy["y"] > enemy["_ground_y"]:
                 enemy["y"] = enemy["_ground_y"]
                 enemy["vel_y"] = 0
 
-    #PLATFORMS
+    # PLATFORMS
     for platform in platform_data:
-        if "dir" not in platform:
-            platform["dir"] = 1
+        if "moving_to_end" not in platform:
+            platform["moving_to_end"] = True
             platform["_start_x"] = platform["x"]
             platform["_start_y"] = platform["y"]
 
@@ -166,28 +202,28 @@ def update_entities() -> None:
         platform["old_x"] = platform["x"]
         platform["old_y"] = platform["y"]
 
-        target_x = platform["end_x"] if platform["dir"] == 1 else platform["_start_x"]
-        target_y = platform["end_y"] if platform["dir"] == 1 else platform["_start_y"]
+        target_x = platform["end_x"] if platform["moving_to_end"] else platform["_start_x"]
+        target_y = platform["end_y"] if platform["moving_to_end"] else platform["_start_y"]
+
+        speed = platform.get("speed", 1)
 
         # horizontal first
         if platform["x"] != target_x:
-            step = platform.get("speed") * platform["dir"]
-            platform["x"] += step
+            if platform["x"] < target_x:
+                platform["x"] = min(target_x, platform["x"] + speed)
+            else:
+                platform["x"] = max(target_x, platform["x"] - speed)
 
-            if (platform["dir"] == 1 and platform["x"] >= target_x) or (platform["dir"] == -1 and platform["x"] <= target_x):
-                platform["x"] = target_x
-
-        # vertical
+        # vertical second
         elif platform["y"] != target_y:
-            step = platform.get("speed") * platform["dir"]
-            platform["y"] += step
+            if platform["y"] < target_y:
+                platform["y"] = min(target_y, platform["y"] + speed)
+            else:
+                platform["y"] = max(target_y, platform["y"] - speed)
 
-            if (platform["dir"] == 1 and platform["y"] >= target_y) or (platform["dir"] == -1 and platform["y"] <= target_y):
-                platform["y"] = target_y
-
-        # switch
+        # switch destination state
         if platform["x"] == target_x and platform["y"] == target_y:
-            platform["dir"] *= -1
+            platform["moving_to_end"] = not platform["moving_to_end"]
 
 def run_custom_level(screen, clock, level: str) -> str:
     """Handles running and the functionality of the level.
@@ -196,7 +232,7 @@ def run_custom_level(screen, clock, level: str) -> str:
     (gravity, horizontal movement, jumping), resolves tile and moving-platform 
     collisions, tracks the side-scrolling camera, and handles win/loss states.
     """
-
+    
     load_level(level)
 
     spawn_x = 100 
@@ -211,14 +247,13 @@ def run_custom_level(screen, clock, level: str) -> str:
     on_ground = False
 
     player_size = int(tile_size / 1.5)
-
     world_width = len(map_data[0]) * tile_size
 
-    #font
+    # font
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)
 
-    #COLIDERS
+    # COLLIDERS
     colliders = []
     danger = []
     end = []
@@ -243,12 +278,83 @@ def run_custom_level(screen, clock, level: str) -> str:
     player = pygame.Rect(spawn_x + (tile_size - player_size) // 2 , spawn_y + (tile_size - player_size) // 2, player_size, player_size)
     player_real_x = float(player.x)
 
+    # ----------------------------------------------------
+    # HELPER COMPONENT: DRAWING BUTTONS
+    # ----------------------------------------------------
+    # Since your custom buttons use actions, we can manually check 
+    # for clicks inside our sub-loops using this quick helper.
+    def draw_and_check_button(btn, mouse_pos, mouse_clicked):
+        pygame.draw.rect(screen, btn.color, btn.rect)
+        if btn.text and btn.font:
+            text_surf = btn.font.render(btn.text, True, btn.text_color)
+            text_rect = text_surf.get_rect(center=btn.rect.center)
+            screen.blit(text_surf, text_rect)
+        
+        if btn.rect.collidepoint(mouse_pos) and mouse_clicked:
+            return True
+        return False
+
+    # ----------------------------------------------------
+    # NEW FEATURE: GAME OVER & PAUSE OVERLAYS
+    # ----------------------------------------------------
+    def show_menu_overlay(title_text):
+        """Freezes the frame, darkens the screen, and returns a string command."""
+        # Create a darkened semi-transparent surface
+        overlay = pygame.Surface((full_width, full_height), pygame.SRCALPHA)
+        overlay.fill((25, 25, 25, 180)) # RGB + Alpha transparency
+        screen.blit(overlay, (0, 0))
+
+        # Re-render title text
+        title_surf = nadpisy.render(title_text, True, white)
+        title_rect = title_surf.get_rect(center=(full_width / 2, 40))
+        screen.blit(title_surf, title_rect)
+
+        # Match button alignments with your layout constraints
+        btn_restart = Menu_Button(full_width/2 - 200, 150, 400, 50, white, text="RESTART / RESUME", font=buttons_text, text_color=black)
+        btn_leave = Menu_Button(full_width/2 - 200, 150 + 50 + 25, 400, 50, white, text="LEAVE TO LEVELS", font=buttons_text, text_color=black)
+
+        pygame.display.update()
+
+        waiting = True
+        while waiting:
+            mouse_clicked = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        mouse_clicked = True
+                if event.type == pygame.KEYDOWN and title_text == "GAME PAUSED":
+                    if event.key == pygame.K_ESCAPE: # Pressing ESC again unpauses
+                        return "resume"
+
+            mouse_pos = pygame.mouse.get_pos()
+
+            if draw_and_check_button(btn_restart, mouse_pos, mouse_clicked):
+                return "restart" if title_text == "GAME OVER" else "resume"
+            
+            if draw_and_check_button(btn_leave, mouse_pos, mouse_clicked):
+                return "leave"
+
+            pygame.display.update()
+            clock.tick(FPS)
+
+    # ----------------------------------------------------
+    # MAIN LOOP
+    # ----------------------------------------------------
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            # Check for pause input
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    choice = show_menu_overlay("GAME PAUSED")
+                    if choice == "leave":
+                        return "custom_levels"
 
         keys = pygame.key.get_pressed()
 
@@ -282,12 +388,10 @@ def run_custom_level(screen, clock, level: str) -> str:
 
         for platform in platform_data:
             platform_rect = pygame.Rect(platform["x"] * tile_size, platform["y"] * tile_size, tile_size, tile_size)
-            platform_delta_y = (platform["y"] - platform["old_y"]) * tile_size  # vertical movement of platform
+            platform_delta_y = (platform["y"] - platform["old_y"]) * tile_size
 
-            # check if player is on top OR very close to top
             if player.colliderect(platform_rect):
                 if player.bottom - vel_y <= platform_rect.top + 2 or (platform_delta_y < 0 and player.top < platform_rect.bottom):
-                    # snap player on top if falling
                     if vel_y >= 0:
                         player.bottom = platform_rect.top
                         vel_y = 0
@@ -312,9 +416,8 @@ def run_custom_level(screen, clock, level: str) -> str:
         else:
             platform_delta_x = 0
 
-        player_real_x += platform_delta_x  # move horizontally with platform
+        player_real_x += platform_delta_x
 
-        # apply player input
         if keys[pygame.K_d]:
             player_real_x += movement_strength
         elif keys[pygame.K_a]:
@@ -324,68 +427,83 @@ def run_custom_level(screen, clock, level: str) -> str:
         future_rect = pygame.Rect(int(player_real_x), player.y, player.width, player.height)
         for tile in colliders:
             if future_rect.colliderect(tile):
-                if player_real_x > player.x:  # moving right
+                if player_real_x > player.x:
                     future_rect.right = tile.left
-                elif player_real_x < player.x:  # moving left
+                elif player_real_x < player.x:
                     future_rect.left = tile.right
                 player_real_x = future_rect.x
 
         # FINAL POSITION
         player.x = int(player_real_x)
 
+        # ----------------------------------------------------
+        # DEATH CONDITIONS (TRIGGER OVERLAYS INSTEAD OF INSTANT RETURN)
+        # ----------------------------------------------------
+        is_dead = False
+
         if player.y > full_height:
-            return "custom_levels"
+            is_dead = True
         
-        # hitting blockdanger
         for collider in danger:
             if player.colliderect(collider):
-                print("WHY ARE YOU DAD?")
+                is_dead = True
+                break
+
+        # Check enemy collisions in absolute world coordinates
+        for enemy in enemy_data:
+            enemy_world_rect = pygame.Rect(enemy["x"] * tile_size, enemy["y"] * tile_size, tile_size, tile_size)
+            if player.colliderect(enemy_world_rect):
+                is_dead = True
+                break
+
+        if is_dead:
+            choice = show_menu_overlay("GAME OVER")
+            if choice == "restart":
+                return run_custom_level(screen, clock, level) # Restart current level loop
+            elif choice == "leave":
                 return "custom_levels"
-            
+
         # hitting end
         for collider in end:
             if player.colliderect(collider):
                 print("YOU WON")
-                return "custom_levels"
+                # Trigger the victory overlay using your existing menu style
+                choice = show_menu_overlay("LEVEL WON")
+                if choice == "restart":
+                    return run_custom_level(screen, clock, level)  # Replays current level cleanly
+                elif choice == "leave":
+                    return "levels"  # Returns back to the main levels list
             
-        # for platform in platform_data:
-        #     platform_rect = pygame.Rect(platform["x"] * tile_size, platform["y"] * tile_size, tile_size, tile_size)
-    
+        # ----------------------------------------------------
+        # RENDERING
+        # ----------------------------------------------------
         draw_background(screen)
 
         for y, row in enumerate(map_data):
             for x, tile in enumerate(row):
-                if tile == 0:
-                    pygame.draw.rect(screen, tile_colors[0],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
-                if tile == 1:
-                    pygame.draw.rect(screen, tile_colors[1],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
-                if tile == 2:
-                    pygame.draw.rect(screen, tile_colors[2],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
-                if tile == 3:
-                    pygame.draw.rect(screen, tile_colors[3],( x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
+                if tile in tile_colors and tile_colors[tile] is not None:
+                    pygame.draw.rect(screen, tile_colors[tile], (x * tile_size - camera_x, y * tile_size, tile_size, tile_size))
         
         for enemy in enemy_data:
-            if enemy["type"] == "walker":
-                color = blue 
-            elif enemy["type"] == "jumper":
-                color = orange 
-
-            enemy_rect = pygame.Rect(enemy["x"] * tile_size - camera_x, enemy["y"] * tile_size, tile_size, tile_size)
-            pygame.draw.rect(screen, color, enemy_rect)
-            
-            if player.colliderect(enemy_rect):
-                print("WHY ARE YOU DAD?")
-                return "custom_levels"
+            color = blue if enemy["type"] == "walker" else orange
+            enemy_screen_rect = pygame.Rect(enemy["x"] * tile_size - camera_x, enemy["y"] * tile_size, tile_size, tile_size)
+            pygame.draw.rect(screen, color, enemy_screen_rect)
             
         for platform in platform_data:
             platform_rect = pygame.Rect(platform["x"] * tile_size - camera_x, platform["y"] * tile_size, tile_size, tile_size)
             pygame.draw.rect(screen, purple, platform_rect)
 
-        # Weeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        pygame.draw.rect(screen,yellow,( player.x - camera_x, player.y, player.width, player.height))
+        # Draw player
+        pygame.draw.rect(screen, yellow, (player.x - camera_x, player.y, player.width, player.height))
 
-        text = nadpisy.render(f"Custom level: {level}", True, white)
+        level_num = level.replace("_data.json", "").replace("level", "")
+
+        # Draw the clean title text: "Level 1"
+        text = nadpisy.render(f"CUSTOM LEVEL {level_num}", True, white)
         screen.blit(text, (20, 20))
+
+        pause_text = nadpisy.render("Press 'ESC' to pause", True, white)
+        screen.blit(pause_text, (20, 50))
 
         pygame.display.update()
         clock.tick(FPS)

@@ -85,7 +85,8 @@ def run_level_menu(screen, clock) -> tuple | str:
     buttons = []
     y_start = 50
     for i, level_file in enumerate(levels):
-        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f=level_file: to_level(f), text = level_file.replace("_data.json","").upper(), font = buttons_text, text_color = black))
+        clean_text = level_file.replace("_data.json", "").replace("level", "LEVEL ")
+        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f=level_file: to_level(f), text = clean_text, font = buttons_text, text_color = black))
 
     back_button = Menu_Button(full_width - 120 - 25, full_height - 75, 120, 50, white, action = to_menu, text = "MAIN MENU", font = buttons_text, text_color = black)
 
