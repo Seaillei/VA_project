@@ -279,9 +279,6 @@ def run_level(screen, clock, level: str) -> str:
     player = pygame.Rect(spawn_x + (tile_size - player_size) // 2 , spawn_y + (tile_size - player_size) // 2, player_size, player_size)
     player_real_x = float(player.x)
 
-    # ----------------------------------------------------
-    # HELPER COMPONENT: DRAWING BUTTONS
-    # ----------------------------------------------------
     def draw_and_check_button(btn, mouse_pos, mouse_clicked):
         pygame.draw.rect(screen, btn.color, btn.rect)
         if btn.text and btn.font:
@@ -293,9 +290,6 @@ def run_level(screen, clock, level: str) -> str:
             return True
         return False
 
-    # ----------------------------------------------------
-    # MENU & GAME OVER OVERLAYS
-    # ----------------------------------------------------
     def show_menu_overlay(title_text):
         """Freezes the frame, darkens the screen, and returns a string command."""
         # Create a darkened semi-transparent surface
@@ -339,9 +333,6 @@ def run_level(screen, clock, level: str) -> str:
             pygame.display.update()
             clock.tick(FPS)
 
-    # ----------------------------------------------------
-    # MAIN LOOP
-    # ----------------------------------------------------
     running = True
     while running:
         for event in pygame.event.get():
@@ -435,9 +426,6 @@ def run_level(screen, clock, level: str) -> str:
         # FINAL POSITION
         player.x = int(player_real_x)
 
-        # ----------------------------------------------------
-        # DEATH CONDITIONS WITH MENU TRIGGER
-        # ----------------------------------------------------
         is_dead = False
 
         if player.y > full_height:
@@ -473,9 +461,6 @@ def run_level(screen, clock, level: str) -> str:
                 elif choice == "leave":
                     return "levels"  # Returns back to the main levels list
             
-        # ----------------------------------------------------
-        # RENDERING WITH CAMERA FIXES
-        # ----------------------------------------------------
         draw_background(screen)
 
         for y, row in enumerate(map_data):
