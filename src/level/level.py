@@ -292,17 +292,14 @@ def run_level(screen, clock, level: str) -> str:
 
     def show_menu_overlay(title_text):
         """Freezes the frame, darkens the screen, and returns a string command."""
-        # Create a darkened semi-transparent surface
         overlay = pygame.Surface((full_width, full_height), pygame.SRCALPHA)
-        overlay.fill((25, 25, 25, 180)) # RGB + Alpha transparency
+        overlay.fill((25, 25, 25, 180)) 
         screen.blit(overlay, (0, 0))
 
-        # Re-render title text
         title_surf = nadpisy.render(title_text, True, white)
         title_rect = title_surf.get_rect(center=(full_width / 2, 40))
         screen.blit(title_surf, title_rect)
 
-        # Match button alignments with your layout constraints
         btn_restart = Menu_Button(full_width/2 - 200, 150, 400, 50, white, text="RESTART / RESUME", font=buttons_text, text_color=black)
         btn_leave = Menu_Button(full_width/2 - 200, 150 + 50 + 25, 400, 50, white, text="LEAVE TO LEVELS", font=buttons_text, text_color=black)
 
@@ -436,7 +433,7 @@ def run_level(screen, clock, level: str) -> str:
                 is_dead = True
                 break
 
-        # Fixed Enemy Collision (Checks in true world space coordinates)
+        # enemy colision
         for enemy in enemy_data:
             enemy_world_rect = pygame.Rect(enemy["x"] * tile_size, enemy["y"] * tile_size, tile_size, tile_size)
             if player.colliderect(enemy_world_rect):
@@ -454,13 +451,13 @@ def run_level(screen, clock, level: str) -> str:
         for collider in end:
             if player.colliderect(collider):
                 print("YOU WON")
-                # Trigger the victory overlay using your existing menu style
                 choice = show_menu_overlay("LEVEL WON")
                 if choice == "restart":
-                    return run_level(screen, clock, level)  # Replays current level cleanly
+                    return run_level(screen, clock, level) 
                 elif choice == "leave":
-                    return "levels"  # Returns back to the main levels list
+                    return "levels"  
             
+
         draw_background(screen)
 
         for y, row in enumerate(map_data):
@@ -482,7 +479,6 @@ def run_level(screen, clock, level: str) -> str:
 
         level_num = level.replace("_data.json", "").replace("level", "")
 
-        # Draw the clean title text: "Level 1"
         text = nadpisy.render(f"LEVEL {level_num}", True, white)
         screen.blit(text, (20, 20))
 
