@@ -1,7 +1,6 @@
 import pygame
 from level_editor.level_editor import run_editor
 from level_editor.custom_level_menu import run_custom_menu
-from level_editor.custom_level import run_custom_level
 from main_menu.menu import run_menu
 from level.level_menu import run_level_menu
 from level.level import run_level
@@ -43,10 +42,7 @@ def main() -> None:
 
         elif isinstance(current_state, tuple):
             level_type, level_name = current_state
-            if level_type == "custom":
-                current_state = run_custom_level(screen, clock, level_name)
-            elif level_type == "standard":
-                current_state = run_level(screen, clock, level_name)
+            current_state = run_level(screen, clock, level_name, level_type = level_type)
 
 if __name__ == "__main__":
     main()
