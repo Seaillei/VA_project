@@ -28,6 +28,13 @@ def main() -> None:
     running = True
 
     while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
+
         if current_state == "menu":
             current_state = run_menu(screen, clock)
 
@@ -43,6 +50,8 @@ def main() -> None:
         elif isinstance(current_state, tuple):
             level_type, level_name = current_state
             current_state = run_level(screen, clock, level_name, level_type = level_type)
+            
+    pygame.quit()
 
 if __name__ == "__main__":
     main()

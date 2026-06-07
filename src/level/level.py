@@ -2,6 +2,8 @@ import pygame
 import os
 import json
 
+pygame.mixer.init()
+
 FPS = 60
 
 full_width = 1100
@@ -42,6 +44,12 @@ tile_colors = {
 map_data = []
 enemy_data = []
 platform_data = []
+
+# sounds
+script_dir = os.path.dirname(os.path.abspath(__file__))
+death_sound_path = os.path.join(script_dir, "..", "sounds", "sad_hamster_violin.wav")
+
+death_sound = pygame.mixer.Sound(death_sound_path)
 
 def load_level(level: str, level_type: str = "standard") -> list | None:
     """Handles loading individual levels from either regular or custom folders."""
@@ -240,23 +248,24 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
         return False
 
     def show_menu_overlay(title_text):
-        overlay = pygame.Surface((full_width, full_height), pygame.SRCALPHA)
-        overlay.fill((25, 25, 25, 180)) 
-        screen.blit(overlay, (0, 0))
-
-        title_surf = nadpisy.render(title_text, True, white)
-        title_rect = title_surf.get_rect(center=(full_width / 2, 40))
-        screen.blit(title_surf, title_rect)
-
-        btn_restart = Menu_Button(full_width/2 - 200, 150, 400, 50, white, text="RESTART / RESUME", font=buttons_text, text_color=black)
-        
-        leave_label = "LEAVE TO CUSTOM LEVELS" if level_type == "custom" else "LEAVE TO LEVELS"
-        btn_leave = Menu_Button(full_width/2 - 200, 150 + 50 + 25, 400, 50, white, text=leave_label, font=buttons_text, text_color=black)
-
-        pygame.display.update()
-
         waiting = True
         while waiting:
+            current_w = screen.get_width()
+            current_h = screen.get_height()
+
+            overlay = pygame.Surface((current_w, current_h), pygame.SRCALPHA)
+            overlay.fill((25, 25, 25, 180)) 
+            screen.blit(overlay, (0, 0))
+
+            title_surf = nadpisy.render(title_text, True, white)
+            title_rect = title_surf.get_rect(center=(current_w / 2, 40))
+            screen.blit(title_surf, title_rect)
+
+            btn_restart = Menu_Button(current_w / 2 - 200, 150, 400, 50, white, text="RESTART / RESUME", font=buttons_text, text_color=black)
+            
+            leave_label = "LEAVE TO CUSTOM LEVELS" if level_type == "custom" else "LEAVE TO LEVELS"
+            btn_leave = Menu_Button(current_w / 2 - 200, 150 + 50 + 25, 400, 50, white, text=leave_label, font=buttons_text, text_color=black)
+
             mouse_clicked = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -265,8 +274,10 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mouse_clicked = True
-                if event.type == pygame.KEYDOWN and title_text == "GAME PAUSED":
-                    if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_F11:
+                        pygame.display.toggle_fullscreen()
+                    elif event.key == pygame.K_ESCAPE and title_text == "GAME PAUSED":
                         return "resume"
 
             mouse_pos = pygame.mouse.get_pos()
@@ -287,7 +298,9 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
+                elif event.key == pygame.K_ESCAPE:
                     choice = show_menu_overlay("GAME PAUSED")
                     if choice == "leave":
                         return exit_menu_state
@@ -360,6 +373,7 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
         player.x = int(player_real_x)
 
         is_dead = False
+        
         if player.y > full_height:
             is_dead = True
         
@@ -375,6 +389,8 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
                 break
 
         if is_dead:
+            death_sound.play() 
+            
             choice = show_menu_overlay("GAME OVER")
             if choice == "restart":
                 return run_level(screen, clock, level, level_type)
@@ -387,7 +403,7 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
                 if choice == "restart":
                     return run_level(screen, clock, level, level_type)
                 elif choice == "leave":
-                    return exit_menu_state  
+                    return exit_menu_state
 
         draw_background(screen)
 
@@ -412,7 +428,7 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
         text = nadpisy.render(f"{prefix}LEVEL {level_num}", True, white)
         screen.blit(text, (20, 20))
 
-        pause_text = nadpisy.render("Press 'ESC' to pause", True, white)
+        pause_text = nadpisy.render("Press ESC to pause", True, white)
         screen.blit(pause_text, (20, 50))
 
         pygame.display.update()

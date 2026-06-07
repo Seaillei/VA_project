@@ -177,11 +177,11 @@ def draw_background(screen) -> None:
     screen.fill(gray)
 
 def draw_grid(screen) -> None:
-    #verticaly
     for c in range(max_collums + 1):
-        pygame.draw.line(screen, white, (c * tile_size - scroll, 0), (c * tile_size - scroll, full_height))
+        line_x = c * tile_size - scroll
+        if 0 <= line_x <= full_width:
+            pygame.draw.line(screen, white, (line_x, 0), (line_x, full_height))
 
-    #horizontaly
     for c in range(rows + 1):
         pygame.draw.line(screen, white, (0, c * tile_size), (full_width, c * tile_size))
 

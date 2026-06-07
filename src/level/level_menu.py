@@ -23,16 +23,19 @@ class Menu_Button():
         self.text_color = text_color
         self.font = font
 
+    def center_horizontally(self, screen) -> None:
+        screen_w = screen.get_width()
+        self.rect.x = (screen_w - self.rect.width) // 2
+
     def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, self.rect)
 
         if self.text != "":
             text_surface = self.font.render(self.text, True, self.text_color)
             text_rect = text_surface.get_rect(center=self.rect.center)
-
             screen.blit(text_surface, text_rect)
 
-    def handle_event(self, event) -> tuple | str | None:
+    def handle_event(self, event) -> str | None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
@@ -76,7 +79,7 @@ def run_level_menu(screen, clock) -> tuple | str:
     handles background rendering, and forwards navigation states back to the game controller.
     """
 
-    #font
+    # font
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)
 
@@ -86,7 +89,7 @@ def run_level_menu(screen, clock) -> tuple | str:
     y_start = 50
     for i, level_file in enumerate(levels):
         clean_text = level_file.replace("_data.json", "").replace("level", "LEVEL ")
-        buttons.append(Menu_Button(full_width/2 - 200, y_start + i * 60, 400, 50, green, action = lambda f=level_file: to_level(f), text = clean_text, font = buttons_text, text_color = black))
+        buttons.append(Menu_Button(0, y_start + i * 60, 400, 50, green, action = lambda f=level_file: to_level(f), text = clean_text, font = buttons_text, text_color = black))
 
     back_button = Menu_Button(full_width - 120 - 25, full_height - 75, 120, 50, white, action = to_menu, text = "MAIN MENU", font = buttons_text, text_color = black)
 
@@ -95,6 +98,10 @@ def run_level_menu(screen, clock) -> tuple | str:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
 
             for button in buttons:
                 result = button.handle_event(event)
@@ -106,8 +113,11 @@ def run_level_menu(screen, clock) -> tuple | str:
                 return result
 
         screen.fill(gray)
+        
         for button in buttons:
+            button.center_horizontally(screen)
             button.draw(screen)
+            
         back_button.draw(screen)
 
         pygame.display.update()

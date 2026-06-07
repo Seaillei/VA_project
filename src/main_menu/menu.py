@@ -13,7 +13,7 @@ class Menu_Button():
     detecting left-clicks on its bounding box, and executing a pre-assigned 
     callback action when clicked.
     """
-
+    
     def __init__(self, x: float, y: float, width: int, height: int, color: tuple, action=None, text: str = "", font=None, text_color: tuple = (0, 0, 0)) -> None:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
@@ -22,13 +22,18 @@ class Menu_Button():
         self.text_color = text_color
         self.font = font
 
+    # --- ADDED THIS METHOD SO THE CLASS HAS THE ATTRIBUTE ---
+    def center_horizontally(self, screen) -> None:
+        """Dynamically centers the button horizontally based on the current screen width."""
+        screen_w = screen.get_width()
+        self.rect.x = (screen_w - self.rect.width) // 2
+
     def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, self.rect)
-
+        
         if self.text != "":
             text_surface = self.font.render(self.text, True, self.text_color)
             text_rect = text_surface.get_rect(center=self.rect.center)
-
             screen.blit(text_surface, text_rect)
 
     def handle_event(self, event) -> str | None:
@@ -77,16 +82,20 @@ def run_menu(screen, clock) -> str:
     nadpisy = pygame.font.SysFont("Futura", 28)
     buttons_text = pygame.font.SysFont("Futura", 15)
 
-    level_button = Menu_Button(full_width/2 - 200, 75, 400, 50, white, action = to_levels, text = "LEVELS", font = buttons_text, text_color = black)
-    editor_button = Menu_Button(full_width/2 - 200, 75 + 50 + 25, 400, 50, white, action = to_editor, text = "LEVEL EDITOR", font = buttons_text, text_color = black)
-    custom_levels_button = Menu_Button(full_width/2 - 200, 75 + 50 + 25 + 50 + 25, 400, 50, white, action = to_custom_levels, text = "CUSTOM LEVELS", font = buttons_text, text_color = black)
-    quit_game_button = Menu_Button(full_width/2 - 200, 75 + 50 + 25 + 50 + 25 + 50 + 25, 400 , 50, white, action = quit_game, text = "QUIT GAME", font = buttons_text, text_color = black)
+    level_button = Menu_Button(0, 75, 400, 50, white, action = to_levels, text = "LEVELS", font = buttons_text, text_color = black)
+    editor_button = Menu_Button(0, 75 + 50 + 25, 400, 50, white, action = to_editor, text = "LEVEL EDITOR", font = buttons_text, text_color = black)
+    custom_levels_button = Menu_Button(0, 75 + 50 + 25 + 50 + 25, 400, 50, white, action = to_custom_levels, text = "CUSTOM LEVELS", font = buttons_text, text_color = black)
+    quit_game_button = Menu_Button(0, 75 + 50 + 25 + 50 + 25 + 50 + 25, 400 , 50, white, action = quit_game, text = "QUIT GAME", font = buttons_text, text_color = black)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
 
             result = level_button.handle_event(event)
             if result:
@@ -106,6 +115,14 @@ def run_menu(screen, clock) -> str:
         
         screen.fill(gray)
 
+        fullscreen_text = nadpisy.render("Press F11 for fullscreen", True, white)
+        screen.blit(fullscreen_text, (20, 20))
+        
+        level_button.center_horizontally(screen)
+        editor_button.center_horizontally(screen)
+        custom_levels_button.center_horizontally(screen)
+        quit_game_button.center_horizontally(screen)
+        
         level_button.draw(screen)
         editor_button.draw(screen)
         custom_levels_button.draw(screen)

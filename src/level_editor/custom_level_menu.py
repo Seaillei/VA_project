@@ -23,16 +23,19 @@ class Menu_Button():
         self.text_color = text_color
         self.font = font
 
+    def center_horizontally(self, screen) -> None:
+        screen_w = screen.get_width()
+        self.rect.x = (screen_w - self.rect.width) // 2
+
     def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, self.rect)
 
         if self.text != "":
             text_surface = self.font.render(self.text, True, self.text_color)
             text_rect = text_surface.get_rect(center=self.rect.center)
-
             screen.blit(text_surface, text_rect)
 
-    def handle_event(self, event) -> tuple | str | None:
+    def handle_event(self, event) -> str | None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 if self.action:
@@ -96,6 +99,10 @@ def run_custom_menu(screen, clock) -> tuple | str:
                 pygame.quit()
                 exit()
 
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
+
             for button in buttons:
                 result = button.handle_event(event)
                 if result:
@@ -106,8 +113,11 @@ def run_custom_menu(screen, clock) -> tuple | str:
                 return result
 
         screen.fill(gray)
+        
         for button in buttons:
+            button.center_horizontally(screen)
             button.draw(screen)
+            
         back_button.draw(screen)
 
         pygame.display.update()
