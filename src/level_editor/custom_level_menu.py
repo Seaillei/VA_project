@@ -99,7 +99,7 @@ def run_custom_menu(screen, clock) -> tuple | str:
                 pygame.quit()
                 exit()
 
-            elif event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
 

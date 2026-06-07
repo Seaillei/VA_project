@@ -47,9 +47,15 @@ platform_data = []
 
 # sounds
 script_dir = os.path.dirname(os.path.abspath(__file__))
-death_sound_path = os.path.join(script_dir, "..", "sounds", "sad_hamster_violin.wav")
 
+death_sound_path = os.path.join(script_dir, "..", "sounds", "sad_hamster_violin.wav")
 death_sound = pygame.mixer.Sound(death_sound_path)
+
+win_sound_path = os.path.join(script_dir, "..", "sounds", "shine_bright_like_a_barcal.mp3")
+win_sound = pygame.mixer.Sound(win_sound_path)
+
+jump_sound_path = os.path.join(script_dir, "..", "sounds", "jump.mp3")
+jump_sound = pygame.mixer.Sound(jump_sound_path)
 
 def load_level(level: str, level_type: str = "standard") -> list | None:
     """Handles loading individual levels from either regular or custom folders."""
@@ -309,6 +315,8 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
         vel_x = 0
 
         if keys[pygame.K_SPACE] and on_ground:
+            jump_sound.play()
+
             vel_y = jump_strength
             on_ground = False
 
@@ -393,16 +401,26 @@ def run_level(screen, clock, level: str, level_type: str = "standard") -> str:
             
             choice = show_menu_overlay("GAME OVER")
             if choice == "restart":
+                death_sound.stop() 
+
                 return run_level(screen, clock, level, level_type)
             elif choice == "leave":
+                death_sound.stop()
+
                 return exit_menu_state
 
         for collider in end:
             if player.colliderect(collider):
+                win_sound.play()
+
                 choice = show_menu_overlay("LEVEL WON")
                 if choice == "restart":
+                    win_sound.stop()
+
                     return run_level(screen, clock, level, level_type)
                 elif choice == "leave":
+                    win_sound.stop()
+
                     return exit_menu_state
 
         draw_background(screen)

@@ -372,9 +372,6 @@ def run_editor(screen, clock) -> str:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_ESCAPE:
-            #         return "menu"
 
             palette.handle_event(event)
             save_button.handle_event(event)
@@ -390,6 +387,10 @@ def run_editor(screen, clock) -> str:
                     scroll_left = True
                 if event.key == pygame.K_d:
                     scroll_right = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:         
+                    pygame.display.toggle_fullscreen()
             
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
